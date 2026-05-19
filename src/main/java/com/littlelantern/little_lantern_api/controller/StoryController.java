@@ -6,6 +6,7 @@ import com.littlelantern.little_lantern_api.model.StoryResponse;
 import com.littlelantern.little_lantern_api.repository.SavedStoryRepository;
 import com.littlelantern.little_lantern_api.service.StoryService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -43,13 +44,21 @@ public class StoryController {
     }
 
     @PostMapping("/saved")
-    public SavedStory saveStory(@RequestBody SavedStory savedStory) {
-        return savedStoryRepository.save(savedStory);
+    public ResponseEntity<SavedStory> saveStory(@RequestBody SavedStory savedStory) {
+        if (savedStory.getTitle() == null || savedStory.getText().trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        SavedStory saved = savedStoryRepository.save(savedStory);
+        return ResponseEntity.ok(saved);
     }
 
     @DeleteMapping("/saved/{id}")
-    public void deleteStory(@PathVariable Long id) {
+    public ResponseEntity<String> deleteStory(@PathVariable Long id) {
+        if (!savedStoryRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         savedStoryRepository.deleteById(id);
+        return ResponseEntity.ok("Story deleted successfully.");
     }
 
 }

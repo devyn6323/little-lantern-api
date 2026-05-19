@@ -61,4 +61,20 @@ public class StoryController {
         return ResponseEntity.ok("Story deleted successfully.");
     }
 
+    @PutMapping("/saved/{id}")
+    public ResponseEntity<SavedStory> updateStory(
+            @PathVariable Long id,
+            @RequestBody SavedStory updatedStory
+    ) {
+        return savedStoryRepository.findById(id)
+                .map(existingStory -> {
+                  existingStory.setTitle(updatedStory.getTitle());
+                  SavedStory saved = savedStoryRepository.save(existingStory);
+                  return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
+
+
+    }
+
 }

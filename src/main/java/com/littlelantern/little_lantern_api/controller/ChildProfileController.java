@@ -42,5 +42,23 @@ public class ChildProfileController {
         return ResponseEntity.ok("Profile deleted successfully");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ChildProfile> updateProfile(
+            @PathVariable Long id,
+            @RequestBody ChildProfile updatedProfile
+    ) {
+        return childProfileRepository.findById(id)
+                .map(existingProfile -> {
+                    existingProfile.setChildName(updatedProfile.getChildName());
+                    existingProfile.setAgeRange(updatedProfile.getAgeRange());
+                    existingProfile.setFavoriteCharacter(updatedProfile.getFavoriteCharacter());
+                    existingProfile.setNotes(updatedProfile.getNotes());
+
+                    ChildProfile savedProfile = childProfileRepository.save(existingProfile);
+                    return ResponseEntity.ok(savedProfile);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
 }

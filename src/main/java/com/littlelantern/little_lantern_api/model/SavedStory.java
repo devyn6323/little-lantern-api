@@ -20,6 +20,7 @@ public class SavedStory {
     private String character;
     private String ageRange;
     private String length;
+    private Long childProfileId;
 
     @Column(columnDefinition = "TEXT")
     private String text;
@@ -86,6 +87,14 @@ public class SavedStory {
 
     public String getText() {
         return text;
+    }
+
+    public Long getChildProfileId() {
+        return childProfileId;
+    }
+
+    public void setChildProfileId(Long childProfileId) {
+        this.childProfileId = childProfileId;
     }
 
     public void setText(String text) {

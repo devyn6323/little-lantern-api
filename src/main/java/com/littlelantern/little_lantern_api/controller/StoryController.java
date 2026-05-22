@@ -43,6 +43,11 @@ public class StoryController {
     savedStoryRepository.findAll();
     }
 
+    @GetMapping("/saved/profile/{childProfileId}")
+    public List<SavedStory> getSavedStoriesByProfile(@PathVariable Long childProfileId) {
+        return savedStoryRepository.findByChildProfileId(childProfileId);
+    }
+
     @PostMapping("/saved")
     public ResponseEntity<SavedStory> saveStory(@RequestBody SavedStory savedStory) {
         if (savedStory.getTitle() == null || savedStory.getText().trim().isEmpty()) {
